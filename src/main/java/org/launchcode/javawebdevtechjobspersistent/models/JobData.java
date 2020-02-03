@@ -32,14 +32,26 @@ public class JobData {
         if (column.equals("all")){
             results = findByValue(value, allJobs);
             return results;
-        }
-        for (Job job : allJobs) {
-
-            String aValue = getFieldValue(job, column);
-
-            if (aValue != null && aValue.toLowerCase().contains(value.toLowerCase())) {
-                results.add(job);
+        } else if (column.equals("skill")) {
+            for (Job job : allJobs) {
+                for (Skill skill : job.getSkills()) {
+                    if (skill.getName().toLowerCase().contains(value.toLowerCase())) {
+                        results.add(job);
+                        break;
+                    }
+                }
             }
+            return results;
+        } else {
+            for (Job job : allJobs) {
+
+                String aValue = getFieldValue(job, column);
+
+                if (aValue != null && aValue.toLowerCase().contains(value.toLowerCase())) {
+                    results.add(job);
+                }
+        }
+
         }
 
         return results;
@@ -52,7 +64,7 @@ public class JobData {
         } else if (fieldName.equals("employer")){
             theValue = job.getEmployer().toString();
         } else {
-            theValue = job.toString();
+            theValue = job.getSkills().toString();
         }
 
         return theValue;
@@ -74,9 +86,9 @@ public class JobData {
 
             if (job.getName().toLowerCase().contains(value.toLowerCase())) {
                 results.add(job);
-            } else if (job.getEmployer().toLowerCase().contains(value.toLowerCase())) {
+            } else if (job.getEmployer().toString().toLowerCase().contains(value.toLowerCase())) {
                 results.add(job);
-            } else if (job.getSkills().contains(value.toLowerCase())) {
+            } else if (job.getSkills().toString().contains(value.toLowerCase())) {
                 results.add(job);
             } else if (job.toString().toLowerCase().contains(value.toLowerCase())) {
                 results.add(job);
